@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./trello/img/icon.ico" type="image/x-icon">
+    <!-- <link rel="stylesheet" href="./trello/css/style.css"> -->
+    <title>CRM</title>
+  </head>
+  <body>
+    <main class="main_content">
+
+      <div class="container">
+        <div class="column to_do">
+          <header class="header header_to_do">
+            <h2>TO DO</h2>
+          </header>
+          <div class="cards_container container_to_do">
+            <div class="card">
+              <div class="card_delete">&times;</div>
+              <div class="card_text">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolores expedita voluptatem est suscipit quae non, laudantium fugiat illum
+              </div>
+            </div>
+          </div>
+          <footer class="add add_to_do">
+            <a href="" class="add_btn active">+ Add another card</a>
+            <div class="add_bar">
+              <form class="add_form" >
+                <textarea class="input_text" rows="4"placeholder="Enter a title for this card..."></textarea>
+                <button class="save_card_btn">Add Card</button>
+                <a href="" class="close_btn">&times;</a>
+              </form>
+            </div>
+          </footer>
+        </div>
+
+        <div class="column in_progress">
+          <header class="header header_in_progress">
+            <h2>IN PROGRESS</h2>
+          </header>
+          <div class="cards_container container_in_progress">
+            <div class="card">
+              <div class="card_delete">&times;</div>
+              <div class="card_text">
+                Do homework js 'another instrument's to work with browser
+              </div>
+            </div>
+          </div>
+          <footer class="add add_in_progress">
+            <a href="" class="add_btn active">+ Add another card</a>
+            <div class="add_bar">
+              <form class="add_form">
+                <textarea class="input_text" rows="4" placeholder="Enter a title for this card..."></textarea>
+                <button class="save_card_btn">Add Card</button>
+                <a href="" class="close_btn">&times;</a>
+              </form>
+            </div>
+          </footer>
+        </div>
+
+        <div class="column done">
+          <header class="header header_done">
+            <h2>DONE</h2>
+          </header>
+          <div class="cards_container container_done">
+            <div class="card">
+              <div class="card_delete">&times;</div>
+              <div class="card_text">
+                Do something somwhere somehow...
+              </div>
+            </div>
+          </div>
+          <footer class="add add_done">
+            <a href="" class="add_btn active">+ Add another card</a>
+            <div class="add_bar">
+              <form class="add_form">
+                <textarea class="input_text" rows="4" placeholder="Enter a title for this card..."></textarea>
+                <button class="save_card_btn">Add Card</button>
+                <a href="" class="close_btn">&times;</a>
+              </form>
+            </div>
+          </footer>
+        </div>
+      </div>
+
+    </main>
+    <!-- <script src="./trello/js/Trello.js"></script> -->
+  </body>
+</html>

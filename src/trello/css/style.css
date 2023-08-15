@@ -1,0 +1,174 @@
+body {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  background-color: rgb(16, 122, 187);
+}
+
+.container {
+  vertical-align: top;
+  position: relative;
+}
+
+h2 {
+  margin-left: 20px;
+
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.column {
+  width: 30vw;
+  margin-top: 1vw;
+  padding: 0.5vw;
+
+  display: inline-block;
+  vertical-align: top;
+
+  background-color: rgb(222, 226, 229);
+}
+
+.column:nth-child(2n+1) {
+  margin-left: 1.4vw;
+  margin-right: 1.4vw;
+}
+
+.header {
+  height: 30px;
+  color: rgb(65, 90, 104);
+}
+
+.cards_container{
+  min-height: 50px;
+  position: relative;
+}
+
+.card {
+  width: 28.2vw;
+  padding: 0.3vw;
+  margin: 0.6vw;
+  min-height: 20px;
+
+  position: relative;
+
+  background-color: #fff;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+.card:hover {
+  cursor: grab;
+}
+
+.card.drugged {
+  position: fixed;
+
+  z-index: 10;
+  background-color: #fff;
+}
+
+.card.drugged:hover {
+  cursor: grabbing;
+}
+
+.card:hover > .card_delete {
+  display: block;
+}
+
+.card_delete {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+
+  display: none;
+}
+
+.card_delete:hover {
+  cursor: pointer;
+}
+
+.card_text {
+  padding: 10px;
+  pointer-events: none;
+}
+
+.add {
+  min-height: 30px;
+
+  display: flex;
+  align-items: center;
+}
+
+.add_btn {
+  margin-left: 20px;
+
+  color: rgb(133, 151, 160);
+  font-size: 16px;
+  text-decoration: none;
+  
+  display: none;
+}
+
+.add_bar {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+.input_text {
+  width: 28.2vw;
+  padding: 0.3vw;
+  margin: 0.6vw;
+
+  color: rgb(107, 127, 138);
+
+  background-color: #fff;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 5px;
+
+  resize: none;
+}
+
+.input_text:focus {
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
+  outline: 0;
+}
+
+.save_card_btn {
+  width: 8vw;
+  height: 30px;
+  margin-left: 0.6vw;
+
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5);
+
+  background-color: rgb(92, 168, 77);
+  color: #fff;
+}
+
+.save_card_btn:hover {
+  cursor: pointer;
+  box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.5);
+  background-color: rgb(105, 175, 91);
+}
+
+.save_card_btn:active {
+  background-color: rgb(84, 146, 72);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+.close_btn {
+  margin-left: 1vw;
+
+  color: rgb(108, 119, 124);
+  font-size: 18px;
+  font-weight: 900;
+
+  text-decoration: none;
+}
