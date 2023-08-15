@@ -108,19 +108,20 @@ export default class Trello {
   _dataLoad() {
     window.addEventListener('load', () => {
       const loadData = JSON.parse(localStorage.getItem('saveData'));
+      if (loadData) {
+        Object.keys(loadData).forEach((el) => {
+          const container = document.querySelector(`.${el}`);
+          container.innerHTML = '';
 
-      Object.keys(loadData).forEach((el) => {
-        const container = document.querySelector(`.${el}`);
-        container.innerHTML = '';
+          if (loadData[el]) {
+            loadData[el].forEach((string) => {
+              const newCard = this._createCard(string);
 
-        if (loadData[el]) {
-          loadData[el].forEach((string) => {
-            const newCard = this._createCard(string);
-
-            document.querySelector(`.${el}`).append(newCard);
-          });
-        }
-      });
+              document.querySelector(`.${el}`).append(newCard);
+            });
+          }
+        });
+      }
     });
   }
 
@@ -129,6 +130,6 @@ export default class Trello {
     this._closeAddBarBtn();
     this._saveCard();
     this._deleteCard();
-    // this._dataLoad();
+    this._dataLoad();
   }
 }
