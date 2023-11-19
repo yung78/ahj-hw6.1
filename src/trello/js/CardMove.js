@@ -1,133 +1,143 @@
 export default class CardMove {
   constructor() {
-    this.cardContainers = document.querySelectorAll('.cards_container ');
-    this.elLocations = {};
+    this.cardContainers = document.querySelectorAll('.cards_container');
+    this.columnsLocations = {};
+    this.draggedElement = null;
+    this.plug = null;
+    this.cardsLocations = [];
+    this.mouseEnter = false;
+
+    this._columnLocation();
   }
 
-  static cardsLocations = [];
+  onMouseDown = (e) => {
+    e.preventDefault();
+    if (e.button !== 0) {
+      return;
+    }
 
-  static target;
+    if (e.target.classList.contains('card')) {
+      const { clientX, clientY } = e;
+      const { left, top, height } = e.target.getBoundingClientRect();
 
-  static difTop;
+      this.difTop = clientY - top;
+      this.difLef = clientX - left;
+      this.height = height + (height * 0.012);
+      this.draggedElement = e.target;
+      this.draggedElement.classList.add('drugged');
 
-  static difLef;
+      this._cardLocation();
+    }
+  };
 
-  static height;
+  // Сохранение координат и элементов колонок
+  _columnLocation() {
+    this.cardContainers.forEach((el) => {
+      const selector = el.className.replace('cards_container ', '');
+      const { left, right, top, bottom } = el.getBoundingClientRect();
 
-  static _createElement() {
+      this.columnsLocations[selector] = { left, right, top, bottom, el };
+    });
+  }
+
+  // Сохранение координат и элементов карточек
+  _cardLocation() {
+    document.querySelectorAll('.card').forEach((el) => {
+      if (!el.classList.contains('drugged')) {
+        const { left, right, top, bottom } = el.getBoundingClientRect();
+
+        this.cardsLocations.push({ left, right, top, bottom, el });
+      }
+    });
+  }
+
+  // Удаление и создание проекции(допустима только одна проекция)
+  _createElement() {
     if (document.querySelector('.plug')) {
       document.querySelector('.plug').remove();
     }
 
     const div = document.createElement('div');
     div.classList.add('plug');
-    div.style.height = `${CardMove.height}px`;
+    div.style.height = `${this.height}px`;
     div.style.width = '100%';
 
     return div;
   }
 
-  _mouseDown() {
-    this.cardContainers.forEach((el) => {
-      el.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-
-        if (e.target.className === 'card') {
-          const { clientX, clientY } = e;
-          const { left, top, height } = e.target.getBoundingClientRect();
-
-          CardMove.difTop = clientY - top;
-          CardMove.difLef = clientX - left;
-          CardMove.target = e.target;
-          CardMove.height = height;
-
-          CardMove.target.classList.add('drugged');
-
-          document.documentElement.addEventListener('mousemove', this.move);
-          this._mouseUp();
-          this._columnLocation();
-          this._cardLocation();
-        }
-      });
-    });
-  }
-
-  _columnLocation() {
-    this.cardContainers.forEach((el) => {
-      const selector = el.className.replace('cards_container ', '');
-      const { left, right, top, bottom } = el.getBoundingClientRect();
-
-      this.elLocations[selector] = { left, right, top, bottom };
-    });
-  }
-
-  _cardLocation() {
-    document.querySelectorAll('.card').forEach((el) => {
-      if (!el.classList.contains('drugged')) {
-        const { left, right, top, bottom } = el.getBoundingClientRect();
-
-        CardMove.cardsLocations.push({ left, right, top, bottom, el });
-      }
-    });
-  }
-
-  _mouseUp() {
-    document.documentElement.addEventListener('mouseup', (e) => {
-      if (document.querySelector('.drugged')) {
-        CardMove.target.classList.remove('drugged');
-      }
-
-      Object.keys(this.elLocations).forEach((el) => {
-        if ((e.clientX >= this.elLocations[el].left)
-        && (e.clientX <= this.elLocations[el].right)
-        && (e.clientY >= this.elLocations[el].top)
-        && (e.clientY <= this.elLocations[el].bottom)) {
-          CardMove.cardsLocations.forEach((elem) => {
-            if ((e.clientX >= elem.left)
-            && (e.clientX <= elem.right)
-            && (e.clientY >= elem.top)
-            && (e.clientY <= elem.bottom)) {
-              if (e.clientY > (elem.top + (elem.bottom - elem.top) / 2)) {
-                elem.el.after(CardMove.target);
-              } else {
-                elem.el.before(CardMove.target);
-              }
-            } else {
-              document.querySelector(`.${el}`).append(CardMove.target);
-            }
-          });
-        }
-
-        CardMove.target.style.top = 'initial';
-        CardMove.target.style.left = 'initial';
-      });
-
-      CardMove._createElement();
-
-      document.documentElement.removeEventListener('mousemove', this.move);
-    });
-  }
-
-  move(e) {
-    CardMove.cardsLocations.forEach((el) => {
-      if ((e.clientX >= el.left)
-      && (e.clientX <= el.right)
-      && (e.clientY >= el.top)
-      && (e.clientY <= el.bottom)) {
-        const plug = CardMove._createElement();
-        if (e.clientY > (el.top + (el.bottom - el.top) / 2)) {
-          el.el.after(plug);
+  // Создание проекций
+  _createPlug(e) {
+    // Проекция при наличии карточек
+    this.cardsLocations.forEach((card) => {
+      // Проверка: курсор в границах одной из карточек
+      if ((e.clientX >= card.left)
+      && (e.clientX <= card.right)
+      && (e.clientY >= card.top)
+      && (e.clientY <= card.bottom)) {
+        this.plug = this._createElement();
+        if (e.clientY > (card.top + (card.bottom - card.top) / 2)) {
+          card.el.after(this.plug);
         } else {
-          el.el.before(plug);
+          card.el.before(this.plug);
         }
       }
     });
 
-    CardMove.target.style.top = `${e.clientY - CardMove.difTop}px`;
-    CardMove.target.style.left = `${e.clientX - CardMove.difLef}px`;
+    // Проекция в колонку при отсутствии карточек, или с одной карточкой, которую перетаскиваем
+    Object.keys(this.columnsLocations).forEach((column) => {
+      // Проверка: курсор в границах одной из колонок
+      if ((e.clientX >= this.columnsLocations[column].left)
+      && (e.clientX <= this.columnsLocations[column].right)
+      && (e.clientY >= this.columnsLocations[column].top)
+      && (e.clientY <= this.columnsLocations[column].bottom)) {
+        const dropColumn = this.columnsLocations[column].el;
+        // Проверка: в колонке нет карточек
+        if ((!dropColumn.querySelector('.card'))) {
+          this.plug = this._createElement();
+          dropColumn.append(this.plug);
+          // Проверка: в колонке только перетаскиваемая карточка
+        } else if ((dropColumn.querySelectorAll('.card').length === 1)
+        && (dropColumn.querySelector('.card').classList.contains('drugged'))) {
+          this.plug = this._createElement();
+          this.columnsLocations[column].el.append(this.plug);
+        }
+      }
+    });
   }
 
-  action() {
-    this._mouseDown();
+  // Дефолтное состояние
+  _clearAll() {
+    this.cardsLocations = [];
+    this.draggedElement.className = 'card';
+    this.draggedElement = null;
+    this.plug = null;
   }
+
+  // Перемещение элемента
+  onMouseMove = (e) => {
+    if (this.draggedElement) {
+      this.draggedElement.style.top = `${e.clientY - this.difTop}px`;
+      this.draggedElement.style.left = `${e.clientX - this.difLef}px`;
+
+      this._createPlug(e);
+    }
+  };
+
+  // Размещение элемента
+  onMouseUp = (e) => {
+    if (e.button !== 0) {
+      return;
+    }
+
+    if (this.plug && this.draggedElement) {
+      document.querySelector('.plug').replaceWith(e.target);
+
+      this._clearAll();
+    } else if (this.draggedElement) {
+      this.draggedElement.style.top = 'initial';
+      this.draggedElement.style.left = 'initial';
+
+      this._clearAll();
+    }
+  };
 }

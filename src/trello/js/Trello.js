@@ -8,19 +8,21 @@ export default class Trello {
     this.saveObj = {};
   }
 
+  // Метод создания карточки
   _createCard(text) {
     const card = document.createElement('div');
     card.classList.add('card');
     card.innerHTML = `
-      <div class="card_delete">&times;</div>
       <div class="card_text">
         ${text}
       </div>
+      <div class="card_delete">&times;</div>
     `;
 
     return card;
   }
 
+  // Метод открытия поля для добавления карточки при нажатии кнопки
   _openAddBar() {
     this.addBtns.forEach((el) => {
       el.addEventListener('click', (e) => {
@@ -31,10 +33,12 @@ export default class Trello {
 
         e.target.classList.remove('active');
         e.target.nextElementSibling.classList.add('active');
+        e.target.closest('footer').querySelector('textarea').addEventListener('click', (evt) => evt.target.focus());
       });
     });
   }
 
+  // Метод закрытия поля для добавления карточки
   _closeAddBar(el) {
     const textArea = el.closest('.add_bar').querySelector('.input_text');
 
@@ -45,6 +49,7 @@ export default class Trello {
     textArea.placeholder = 'Enter a title for this card...';
   }
 
+  // Метод закрытия поля для добавления карточки при нажатии кнопки
   _closeAddBarBtn() {
     this.closeBtns.forEach((el) => {
       el.addEventListener('click', (e) => {
@@ -55,6 +60,7 @@ export default class Trello {
     });
   }
 
+  // Метод сохранения карточки в одной из колонок при событии submit
   _saveCard() {
     this.forms.forEach((el) => {
       el.addEventListener('submit', (e) => {
@@ -82,6 +88,7 @@ export default class Trello {
     });
   }
 
+  // Метод удаления карточки из колоноки при нажатии кнопки
   _deleteCard() {
     document.querySelectorAll('.cards_container').forEach((el) => {
       el.addEventListener('click', (e) => {
@@ -95,6 +102,7 @@ export default class Trello {
     });
   }
 
+  // Метод сохранения данных карточек в localStorage
   _dataSave() {
     this.containers.forEach((el) => {
       const selector = el.className.replace('cards_container ', '');
@@ -105,6 +113,7 @@ export default class Trello {
     localStorage.setItem('saveData', saveData);
   }
 
+  // Метод загрузки данных карточек из localStorage
   _dataLoad() {
     window.addEventListener('load', () => {
       const loadData = JSON.parse(localStorage.getItem('saveData'));

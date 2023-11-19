@@ -42,17 +42,16 @@ h2 {
 
 .cards_container{
   min-height: 50px;
-  position: relative;
 }
 
 .card {
   width: 28.2vw;
-  padding: 0.3vw;
+  padding: 5px;
   margin: 0.6vw;
   min-height: 20px;
 
-  position: relative;
-
+  display: flex;
+  justify-content: space-between;
   background-color: #fff;
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
@@ -64,9 +63,7 @@ h2 {
 
 .card.drugged {
   position: fixed;
-
   z-index: 10;
-  background-color: #fff;
 }
 
 .card.drugged:hover {
@@ -77,10 +74,13 @@ h2 {
   display: block;
 }
 
+.card:hover > .card_text {
+  padding-right: 0;
+}
+
 .card_delete {
-  position: absolute;
-  top: 2px;
-  right: 5px;
+  width: 10px;
+  height: 10px;
 
   display: none;
 }
